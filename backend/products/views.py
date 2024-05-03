@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, mixins 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -40,11 +40,34 @@ class ProductUpdateAPIView(generics.UpdateAPIView):
 
 product_update_view = ProductUpdateAPIView.as_view()
 
+class ProductDestroyAPIView(generics.DestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = 'pk'
+
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
+
+product_destroy_view = ProductDestroyAPIView.as_view()
+
 # class ProductListAPIView(generics.ListAPIView):
 #     queryset = Product.objects.all()
 #     serializer_class = ProductSerializer
 
 # product_list_view = ProductListAPIView.as_view()
+
+class ProductMixinView(
+    mixins.ListModelMixin,
+    generics.GenericAPIView
+    ):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    #def post() #HTTP--> post 
+
+product_mixin_view = ProductMixinView.as_view()
 
 @api_view(['GET','POST'])
 def product_alt_view(request, pk= None, *args, **kwargs):
