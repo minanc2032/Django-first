@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-5&+bxn&ml^(+_$@_go02i7bhl$@#k$%5((9@@4l$2k^8%$7d#6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'api',
     'products'
 ]
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -126,3 +125,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+REST_FRAMEWORK = {
+     "DEFAULT_AUTHENTICATION_CLASSES": [
+         "rest_framework.authentication.SessionAuthentication",
+          "api.authentication.TokenAuthentication"
+          ],
+     "DEFAULT_PERMISSION_CLASSES" : [
+         "rest_framework.permissions.IsAuthenticatedOrReadOnly" #Get  
+     ] 
+
+}
+
